@@ -4,22 +4,22 @@ public class Main {
 
     public static void main(String[] args) {
         //TreadSafeList
-        ThreadSafeList<String> list1 = new ThreadSafeList<>();
+        ThreadSafeList<String> list = new ThreadSafeList<>();
 
-        Thread thread1 = new Thread(() -> list1.add("1")); /*add method test*/
-        Thread thread2 = new Thread(() -> list1.add("2"));
-        Thread thread3 = new Thread(() -> list1.add("3"));
+        Thread thread0 = new Thread(() -> list.add("1")); /*add method*/
+        Thread thread1 = new Thread(() -> list.add("2"));
+        Thread thread2 = new Thread(() -> list.add("3"));
+        thread0.start();
         thread1.start();
         thread2.start();
+
+        Thread thread3 = new Thread(() -> list.remove(1)); /*remove method*/
+        Thread thread4 = new Thread(() -> list.remove(0));
         thread3.start();
-
-        Thread thread4 = new Thread(() -> list1.remove("3")); /*remove method test*/
-        Thread thread5 = new Thread(() -> list1.remove("2"));
         thread4.start();
-        thread5.start();
 
-        Thread thread6 = new Thread(() -> list1.get(0)); /*get method test*/
-        thread6.start();
+        Thread thread5 = new Thread(() -> list.get(0)); /*get method*/
+        thread5.start();
 
 //Petrol station
         PetrolStation station = new PetrolStation(200.0);

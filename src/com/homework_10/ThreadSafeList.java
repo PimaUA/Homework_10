@@ -1,23 +1,40 @@
 package com.homework_10;
 
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ThreadSafeList<T> {
-    private final CopyOnWriteArrayList<T> threadSafeList;
-
-    public ThreadSafeList() {
-        this.threadSafeList = new CopyOnWriteArrayList<>();
-    }
+    private final List<T> arrayList = new ArrayList<>();
+    final ReentrantLock lock = new ReentrantLock();
 
     public void add(T element) {
-        threadSafeList.add(element);
+        final ReentrantLock lock = this.lock;
+        lock.lock();
+        try {
+            arrayList.add(element);
+        } finally {
+            lock.unlock();
+        }
     }
 
-    public void remove(T element) {
-        threadSafeList.remove(element);
+    public void remove(int index) {
+        final ReentrantLock lock = this.lock;
+        lock.lock();
+        try {
+            arrayList.remove(index);
+        } finally {
+            lock.unlock();
+        }
     }
 
     public T get(int index) {
-        return threadSafeList.get(index);
+        final ReentrantLock lock = this.lock;
+        lock.lock();
+        try {
+            return arrayList.get(index);
+        } finally {
+            lock.unlock();
+        }
     }
 }
