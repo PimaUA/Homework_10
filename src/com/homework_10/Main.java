@@ -13,8 +13,8 @@ public class Main {
         thread1.start();
         thread2.start();
 
-        Thread thread3 = new Thread(() -> list.remove(1)); /*remove method*/
-        Thread thread4 = new Thread(() -> list.remove(0));
+        Thread thread3 = new Thread(() -> list.remove("1")); /*remove method*/
+        Thread thread4 = new Thread(() -> list.remove("3"));
         thread3.start();
         thread4.start();
 

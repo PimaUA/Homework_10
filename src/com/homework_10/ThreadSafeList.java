@@ -18,11 +18,11 @@ public class ThreadSafeList<T> {
         }
     }
 
-    public void remove(int index) {
+    public void remove(T element) {
         final ReentrantLock lock = this.lock;
         lock.lock();
         try {
-            arrayList.remove(index);
+            arrayList.remove(element);
         } finally {
             lock.unlock();
         }
