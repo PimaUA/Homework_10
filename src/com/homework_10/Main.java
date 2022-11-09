@@ -1,12 +1,15 @@
 package com.homework_10;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class Main {
 
     public static void main(String[] args) {
         //TreadSafeList
         ThreadSafeList<String> list = new ThreadSafeList<>();
 
-        Thread thread0 = new Thread(() -> list.add("1")); /*add method*/
+        Thread thread0 = new Thread(() -> list.add("1"));             /*add method*/
         Thread thread1 = new Thread(() -> list.add("2"));
         Thread thread2 = new Thread(() -> list.add("3"));
         thread0.start();
@@ -18,11 +21,12 @@ public class Main {
         thread3.start();
         thread4.start();
 
-        Thread thread5 = new Thread(() -> list.get(0)); /*get method*/
+        Thread thread5 = new Thread(() -> list.get(0));               /*get method*/
         thread5.start();
 
 //Petrol station
-        PetrolStation station = new PetrolStation(200.0);
+        ExecutorService service = Executors.newFixedThreadPool(3);
+        PetrolStation station = new PetrolStation(200.0,service);
         station.doRefuel(20.0);
         station.doRefuel(30.0);
         station.doRefuel(30.0);
@@ -31,5 +35,7 @@ public class Main {
         station.doRefuel(20.0);
         station.doRefuel(10.0);
         station.doRefuel(70.0);
+
+        service.shutdownNow();
     }
 }
