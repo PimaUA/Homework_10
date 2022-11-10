@@ -2,12 +2,13 @@ package com.homework_10;
 
 import java.util.Random;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PetrolStation {
-    volatile Double amount;
+    private final AtomicReference<Double> amount;
     private final ExecutorService service;
 
-    public PetrolStation(Double amount, ExecutorService service) {
+    public PetrolStation(AtomicReference<Double> amount, ExecutorService service) {
         this.amount = amount;
         this.service = service;
     }
@@ -17,23 +18,21 @@ public class PetrolStation {
         int low = 3;
         int high = 11;
         long refuellingTime = (random.nextInt(high - low) + low) * 1000;        /*random refuelling time*/
-        Future<Double> remainedAmountCalculation = service.submit(() -> {
-            try {
-                Thread.sleep(refuellingTime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            synchronized (amount) {                                                 /*remained amount calculation*/
-                if (amount > amountNeeded) {
-                    amount -= amountNeeded;
-                } else {
-                    amount = 0.0;
-                }
-                return amount;
-            }
-        });
         try {
-            System.out.println("Calculated result : " + remainedAmountCalculation.get());  /*awaiting result*/
+            Thread.sleep(refuellingTime);                                              /*refuelling in progress*/
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Runnable task = () ->
+                amount.updateAndGet(totalFuel -> totalFuel > amountNeeded ? totalFuel - amountNeeded : 0);
+        service.submit(task);
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
+            System.out.println("Calculated result: " + amount.get());                      /*awaiting result*/
         } catch (Exception e) {
             e.printStackTrace();
         }
