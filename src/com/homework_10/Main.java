@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Main {
 
     public static void main(String[] args) {
-        //TreadSafeList
+        //ThreadSafeList
         ThreadSafeList<String> list = new ThreadSafeList<>();
 
         Thread thread0 = new Thread(() -> list.add("1"));                     /*add method*/
@@ -27,7 +27,7 @@ public class Main {
 
         //Petrol station
         ExecutorService service = Executors.newFixedThreadPool(3);
-        AtomicReference<Double> amount = new AtomicReference<>(200.0);
+        AtomicReference<Double> amount = new AtomicReference<>(500.0);
         PetrolStation station = new PetrolStation(amount, service);
 
         station.doRefuel(20.5);
@@ -37,7 +37,17 @@ public class Main {
         station.doRefuel(20.0);
         station.doRefuel(20.0);
         station.doRefuel(10.0);
-        station.doRefuel(70.0);
+        station.doRefuel(20.5);
+        station.doRefuel(40.0);
+        station.doRefuel(50.0);
+        station.doRefuel(20.0);
+        station.doRefuel(20.0);
+        station.doRefuel(30.0);
+        station.doRefuel(25.0);
+        station.doRefuel(10.5);
+        station.doRefuel(15.0);
+        station.doRefuel(30.0);
+        station.doRefuel(10.0);
 
         service.shutdown();
     }
